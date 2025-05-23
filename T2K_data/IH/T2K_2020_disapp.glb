@@ -1,0 +1,181 @@
+%!GLoBES
+$version="3.0.0"
+
+
+/* ####### Beam flux ####### */
+
+/* EXPOnu=1 */
+
+nuflux(#T2Kplus)<
+	
+	@flux_file="t2kflux_2016_sk_plus250kA_format-globes.dat"
+	@time = 1.9652*1.34	/* years */   /*1 year= 7.48e20 POT */	
+	@norm = 21.8
+>
+nuflux(#T2Kminus)<
+	
+	@flux_file="t2kflux_2016_sk_minus250kA_format-globes.dat"
+	@time = 1.02*2.14	/* years */  /* 1 year= 7.47e20 POT */
+	@norm = 21.8
+>
+
+
+/* ####### Detector settings ###### */
+
+$target_mass = 	22.5	/* kt (fiducial mass)*/
+
+/* ####### Energy window ####### */
+
+
+$emin = 	0.25	/* GeV */
+$emax = 	2.0	/* GeV */
+$bins = 35	
+
+
+
+$sampling_points = 200          
+$sampling_min    = 0.025   /* GeV */
+$sampling_max    = 10  /* GeV */
+
+
+
+
+
+/* ####### Baseline setting ####### */
+
+$profiletype =	 	1 
+$baseline =		295.0	/* km */
+
+
+/* ####### Technical information ####### */
+
+$filter_state = 0 
+$filter_value = 1000000 
+
+
+/* ####### Energy resolution ####### */
+
+energy(#ERES)<
+	@type = 1
+	@sigma_e = {0.0,0.075,0.05}
+>
+
+
+/* ####### Cross sections ####### */
+
+cross(#CC)<
+	@cross_file = "XCC.dat"
+>
+
+
+
+cross(#NC)<
+	@cross_file = "XNC.dat"
+>
+
+/* ####### Channel definitions ####### */
+
+
+
+
+
+channel(#v_m_TO_v_m_cc)<
+	@channel = 	#T2Kplus:	+:	m:	m:	#CC:    #ERES
+@post_smearing_efficiencies= {0.13,0.34,0.42,0.46,0.46,0.44,0.43,0.44,0.45,0.44,0.41,0.39,0.37,0.35,0.33,0.31,0.30,0.28,0.27,0.26,0.25,0.24,0.23,0.23,0.21,0.19,0.19,0.17,0.17,0.16,0.16,0.15,0.14,0.14,0.13}
+>
+
+
+
+channel(#bar_v_m_TO_bar_v_m_cc)<
+	@channel = 	#T2Kplus:	-:	m:	m:	#CC:    #ERES
+
+@post_smearing_efficiencies= {0.13,0.34,0.42,0.46,0.46,0.44,0.43,0.44,0.45,0.44,0.41,0.39,0.37,0.35,0.33,0.31,0.30,0.28,0.27,0.26,0.25,0.24,0.23,0.23,0.21,0.19,0.19,0.17,0.17,0.16,0.16,0.15,0.14,0.14,0.13}
+
+>
+
+
+
+
+
+
+channel(#v_e_TO_v_e)<
+	@channel = 	#T2Kplus:	+:	e:	e:	#CC:    #ERES
+@post_smearing_efficiencies= {0.13,0.34,0.42,0.46,0.46,0.44,0.43,0.44,0.45,0.44,0.41,0.39,0.37,0.35,0.33,0.31,0.30,0.28,0.27,0.26,0.25,0.24,0.23,0.23,0.21,0.19,0.19,0.17,0.17,0.16,0.16,0.15,0.14,0.14,0.13}
+
+>
+
+channel(#bar_v_e_TO_bar_v_e)<
+	@channel = 	#T2Kplus:	-:	e:	e:	#CC:    #ERES
+
+@post_smearing_efficiencies= {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+>
+
+channel(#v_x_TO_v_x)<
+	@channel = 	#T2Kplus:	+:	NOSC_m:	NOSC_m:	#NC:    #ERES
+
+@post_smearing_efficiencies= {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+>
+/*################################################################################*/
+channel(#v_m_bar_TO_v_m_bar_cc)<
+	@channel = 	#T2Kminus:	-:	m:	m:	#CC:    #ERES
+
+@post_smearing_efficiencies= {0.17,0.45,0.52,0.52,0.49,0.45,0.42,0.43,0.48,0.52,0.53,0.50,0.45,0.41,0.37,0.35,0.34,0.32,0.30,0.29,0.27,0.26,0.24,0.23,0.22,0.2,0.20,0.20,0.19,0.19,0.19,0.18,0.18,0.16,0.15}
+>
+
+channel(#v_m_TO_v_m_cc_anti)<
+	@channel = 	#T2Kminus:	+:	m:	m:	#CC:    #ERES
+@post_smearing_efficiencies= {0.17,0.45,0.52,0.52,0.49,0.45,0.42,0.43,0.48,0.52,0.53,0.50,0.45,0.41,0.37,0.35,0.34,0.32,0.30,0.29,0.27,0.26,0.24,0.23,0.22,0.2,0.20,0.20,0.19,0.19,0.19,0.18,0.18,0.16,0.15}
+
+>
+
+channel(#v_e_bar_TO_v_e_bar)<
+	@channel = 	#T2Kminus:	-:	e:	e:	#CC:    #ERES
+
+@post_smearing_efficiencies= {0.17,0.45,0.52,0.52,0.49,0.45,0.42,0.43,0.48,0.52,0.53,0.50,0.45,0.41,0.37,0.35,0.34,0.32,0.30,0.29,0.27,0.26,0.24,0.23,0.22,0.2,0.20,0.20,0.19,0.19,0.19,0.18,0.18,0.16,0.15}
+
+>
+
+channel(#v_e_TO_v_e_anti)<
+	@channel = 	#T2Kminus:	+:	e:	e:	#CC:    #ERES
+@post_smearing_efficiencies= {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+>
+
+
+channel(#v_x_bar_TO_v_x_bar)<
+	@channel = 	#T2Kminus:	-:	NOSC_m:	NOSC_m:	#NC:    #ERES
+
+@post_smearing_efficiencies= {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+>
+
+
+/* ####### Setting the rules ####### */
+
+
+rule(#Nu_Mu_disappearance)<
+ 	@signal = 1@#v_m_TO_v_m_cc 			
+	@signalerror = 0.05 : 0.0001
+	
+	@background =1@#bar_v_m_TO_bar_v_m_cc:1@#v_e_TO_v_e 
+	@backgrounderror = 0.05 : 0.0001		
+		
+	@sys_on_function = "chiSpectrumCalib"
+	@sys_off_function = "chiNoSysSpectrum"
+	@data_flag=1
+	@data={8,9,19,17,14,15,6,10,8,16,8,8,11,10,6,8,7,7,4,10,8,8,3,3,7,6,3,6,1,3,1,2,0,1,0}
+>
+
+
+rule(#Nu_Mu_bar_disappearance)<
+ 	@signal = 1@#v_m_bar_TO_v_m_bar_cc 			
+	@signalerror = 0.05 : 0.0001
+	
+	@background =1@#v_m_TO_v_m_cc_anti:1@#v_e_bar_TO_v_e_bar
+	@backgrounderror = 0.05 : 0.0001		
+		
+	@sys_on_function = "chiSpectrumCalib"
+	@sys_off_function = "chiNoSysSpectrum"
+	@data_flag=1
+	@data={1,5,10,6,5,1,4,1,5,1,4,6,2,6,2,5,2,3,2,2,5,2,4,4,4,2,1,2,0,4,2,0,1,3,0}
+
+>
+/**********************END**********************/

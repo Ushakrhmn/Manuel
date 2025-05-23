@@ -1,0 +1,135 @@
+%!GLoBES
+$version="3.0.0"
+
+
+/* ####### Beam flux ####### */
+
+   
+
+
+
+nuflux(#T2Kminus)<
+	
+	@flux_file="t2kflux_2016_sk_minus250kA_format-globes.dat"
+	@time = 1.02	/* years */  /* 1 year= 7.47e20 POT */
+	@norm = 21.8
+>
+
+
+
+/* ####### Detector settings ###### */
+
+$target_mass = 	22.5	/* kt (fiducial mass)*/
+
+/* ####### Energy window ####### */
+
+
+$emin = 	0.15	/* GeV */
+$emax = 	1.20	/* GeV */
+$bins =         7 
+
+
+$sampling_points = 200          
+$sampling_min    = 0.025   /* GeV */
+$sampling_max    = 1.125  /* GeV */
+
+
+
+
+/* ####### Baseline setting ####### */
+
+$profiletype =	 	1 
+$baseline =		295.0	/* km */
+
+
+/* ####### Technical information ####### */
+
+$filter_state = 0 
+$filter_value = 1000000 
+
+
+/* ####### Energy resolution ####### */
+
+energy(#ERES)<
+	@type = 1
+	@sigma_e = {0.0,0.075,0.05}
+>
+
+
+/* ####### Cross sections ####### */
+
+cross(#CC)<
+	@cross_file = "XCC.dat"
+>
+cross(#NC)<
+	@cross_file = "XNC.dat"
+>
+cross(#QE)<
+	@cross_file = "XQE.dat"
+>
+/* ####### Channel definitions ####### */
+
+
+
+
+
+
+/*####################        anti-nu                      #############################*/
+
+
+channel(#bar_v_m_TO_bar_v_e)<
+	@channel = 	#T2Kminus:	-:	m:	e:	#CC:    #ERES
+@post_smearing_efficiencies= {4.35*0.76,1.60*0.71,1.23*0.74,1.16*0.77,0.93*0.78,0.72*0.79,0.98*0.79}
+>
+
+channel(#v_m_TO_v_e_4anu)<
+	@channel = 	#T2Kminus:	+:	m:	e:	#CC:    #ERES
+@post_smearing_efficiencies= {3.61*0.65,2.59*0.65,1.60*0.71,1.009*0.83,0.95*0.73,0.88*0.86,1.13*0.76}
+>
+
+channel(#v_e_TO_v_e_4anu)<
+	@channel = 	#T2Kminus:	+:	e:	e:	#CC:    #ERES
+@post_smearing_efficiencies= {0.18*0.97,0.065*0.97,0.031*0.89,0.024*1.03,0.032*1.04,0.060*0.95,0.11*1.04}
+
+>
+
+channel(#bar_v_e_TO_bar_v_e_4anu)<
+	@channel = 	#T2Kminus:	-:	e:	e:	#CC:    #ERES
+@post_smearing_efficiencies= {0.18*0.97,0.065*0.97,0.031*0.89,0.024*1.03,0.032*1.04,0.060*0.95,0.11*1.04}
+>
+
+
+channel(#bar_v_x_TO_bar_v_x)<
+	@channel = 	#T2Kminus:	-:	NOSC_m:	NOSC_m:	#NC:    #ERES
+@post_smearing_efficiencies= {0.18*0.97,0.065*0.97,0.031*0.89,0.024*1.03,0.032*1.04,0.060*0.95,0.11*1.04}
+>
+
+/*########################################################################################*/
+
+
+
+
+
+
+
+
+/* ####### Setting the rules ####### */
+
+
+
+rule(#Anti_Nu_E_Appearance)<
+ 	@signal = 1@#bar_v_m_TO_bar_v_e
+	@signalerror = 0.05 : 0.05
+	
+	@background =  1@#v_m_TO_v_e_4anu : 1@#v_e_TO_v_e_4anu :1@#bar_v_e_TO_bar_v_e_4anu : 1@#bar_v_x_TO_bar_v_x
+	@backgrounderror = 0.05 : 0.05
+		
+	@sys_on_function = "chiSpectrumCalib"
+	@sys_off_function = "chiNoSysSpectrum"
+	@data_flag=1
+	@data={0,4,6,2,2,1,0}
+>
+
+
+
+/**********************END**********************/
