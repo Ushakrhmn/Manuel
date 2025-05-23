@@ -1,0 +1,19 @@
+notification            = Never
+universe                = vanilla
+executable              = /afs/cern.ch/user/u/urahaman/Manuel/NOvA_data/NH/chi2_NH_NOvA_2024_newphysics.sh
+output                  = Copy.$(ClusterId).$(ProcId).out
+error                   = Copy.$(ClusterId).$(ProcId).error
+log                     = Copy.$(ClusterId).$(ProcId).log
+getenv                  = True
+should_transfer_files   = NO
+initialdir              = /afs/cern.ch/user/u/urahaman/Manuel/NOvA_data/NH/
+stream_output           = True
+stream_error            = True
+priority                = 20
+request_cpus            = 1
+request_memory          = 8 GB
+request_disk            = 10 GB
++MaxRuntime             = 4200000
+
+
+queue arguments from value_dcp.txt

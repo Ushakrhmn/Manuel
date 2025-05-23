@@ -1,0 +1,251 @@
+%!GLoBES
+
+$version="3.0.0"
+
+/* ####### Beam flux ####### */
+
+nuflux(#NOvA)<
+	@flux_file="0709-nova-plus.dat"
+	@time = 2.248	/* years */ /* 1 year = 6.05 times 10^20 POT*/
+      	@norm = 65.86*6.0 
+>
+
+
+nuflux(#NOvAanti)<
+	@flux_file="0709-nova-minus.dat"
+	@time = 2.066	/* years */
+	@norm = 65.86*6.0 
+>
+
+
+/* ####### Detector settings ###### */
+
+$target_mass = 	        14.0	/* kt */ /* Detector mass is reduced to 14 kton */
+
+
+ /* ####### Energy window ####### */
+
+$emin =                 0.001
+$emax =                 5.0
+$binsize= {0.748,0.12,0.126,0.094,0.094,0.101,0.113,0.088,0.088,0.101,0.094,0.094,0.088,0.12,0.126,0.113,0.113,0.252,0.239,0.504,0.491,1.008}
+
+
+/*
+$emin =                 0.2
+$emax =                 4.2
+$bins =                 20
+*/
+
+
+$sampling_min =                 0.001
+$sampling_max =                 60.0
+$sampling_stepsize= {0.624, 0.125, 0.125, 0.125, 
+0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 
+0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 
+0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 
+0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 
+0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 
+0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 
+0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 
+2, 2, 2, 2, 2, 
+2, 2, 2, 2, 2, 
+2, 2, 2, 2, 2, 
+2, 2, 2, 2, 2, 
+2, 2, 2, 2, 2, 2}
+
+
+/* ####### Baseline setting ####### */
+
+$profiletype = 		3 
+
+/* The relatively larger signal is due to matter effects
+ * whereas the event numbers in the proposal assume two-flavour 
+ * vacuum oscillations
+ */
+
+$densitytab = 		{2.8} 
+$lengthtab = 		{810}	/* km */
+
+
+/* ####### Technical information ####### */
+
+$filter_state = 0 
+$filter_value = 1000000 
+
+
+/* ####### Energy resolution ####### */
+
+energy(#electron)<
+	@type = 1
+	@sigma_e = {0.11,0.0,0.0}
+>
+
+energy(#muon)<
+	@type = 1
+	@sigma_e = {0.09,0.0,0.0}
+>
+
+
+energy(#muonQE)<
+	@type = 1
+	@sigma_e = {0.09,0.0,0.0}
+>
+
+
+
+
+/* ####### Cross sections ####### */
+
+cross(#CC)<
+	@cross_file = "XCC.dat"
+>
+
+cross(#NC)<
+	@cross_file = "XNC.dat"
+>
+
+cross(#QE)<
+	@cross_file = "XQE.dat"
+>
+
+
+/* ####### Channel definitions ####### */
+
+channel(#nu_mu_CC)< /*signal */
+	@channel = 	#NOvA:	+:	m:	m:	#CC:    #muon
+@post_smearing_efficiencies= {0.43, 0.558, 0.603, 0.67, 0.694, 0.761, 0.988, 1.42, 1.657, 1.501, 1.261, 1.128, 1.051, 0.951, 0.83, 0.747, 0.698, 0.665, 0.642, 0.626, 0.599, 0.568}
+>
+
+channel(#numubar_numubar_nubeam)< /*total bkg*/
+	@channel = 	#NOvA:	-:	m:	m:	#QE:    #muonQE	
+@post_smearing_efficiencies= {0.004, 0.559, 0.856, 0.619, 1.063, 0.866, 0.579, 0.242, 0.359, 0.21, 0.581, 0.532, 0.257, 0.129, 0.527, 0.471, 0.356, 0.418, 0.381, 0.153, 0.273, 0.214}
+>
+
+channel(#nu_e_signal)< /*total bkg*/
+	@channel = 	#NOvA:	+:	e:	e:	#CC:    #electron
+@post_smearing_efficiencies= {0.004, 0.559, 0.856, 0.619, 1.063, 0.866, 0.579, 0.242, 0.359, 0.21, 0.581, 0.532, 0.257, 0.129, 0.527, 0.471, 0.356, 0.418, 0.381, 0.153, 0.273, 0.214}
+>
+
+
+
+/*#############################################################################*/
+
+channel(#nu_bar_mu_CC)< /*signal*/ 
+	@channel = 	#NOvAanti:	-:	m:	m:	#CC:    #muon
+@post_smearing_efficiencies= {0.563, 0.505, 0.536, 0.652, 0.572, 0.574, 0.582, 0.607, 0.639, 0.573, 0.563, 0.568, 0.56, 0.578, 0.487, 0.443, 0.417, 0.389, 0.432, 0.375, 0.356, 0.254}
+>
+
+channel(#numu_numu_antinubeam)< /*total bkg*/
+	@channel = 	#NOvAanti:	+:	m:	m:	#QE:    #muonQE
+@post_smearing_efficiencies= {0.028, 0.148, 0.17, 0.2, 0.265, 0.415, 0.587, 0.955, 1.253, 2.408, 2.235, 1.849, 1.079, 1.037, 0.958, 0.942, 0.93, 0.496, 0.514, 0.556, 0.602, 0.711}
+>
+
+channel(#nu_e_bar_signal)< /*total bkg*/
+	@channel = 	#NOvA:	-:	e:	e:	#CC:    #electron
+@post_smearing_efficiencies= {0.028, 0.148, 0.17, 0.2, 0.265, 0.415, 0.587, 0.955, 1.253, 2.408, 2.235, 1.849, 1.079, 1.037, 0.958, 0.942, 0.93, 0.496, 0.514, 0.556, 0.602, 0.711}
+>
+
+
+/*################################################################## */
+
+/*
+channel(#nu_e_beam)< 
+	@channel = 	#NOvA:	+:	e:	e:	#CC:    #electron
+@post_smearing_efficiencies= {0, 0.004351609, 0.004148672, 0.005667205, 0.007467562, 0.007381301, 0.006943105, 0.012204854, 0.007413186, 0.011029564, 0.008631414, 0.009070412, 0.011067654, 0.010651302, 0.01597862, 0.013334462, 0.011763616, 0.014137521, 0.021916235}
+>
+
+channel(#nu_bar_e_beam)<
+	@channel = 	#NOvAanti:	-:	e:	e:	#CC:    #electron
+@post_smearing_efficiencies= {0, 0.004351609, 0.004148672, 0.005667205, 0.007467562, 0.007381301, 0.006943105, 0.012204854, 0.007413186, 0.011029564, 0.008631414, 0.009070412, 0.011067654, 0.010651302, 0.01597862, 0.013334462, 0.011763616, 0.014137521, 0.021916235}
+>
+*/
+
+
+
+
+channel(#nu_bar_e_signal)<
+	@channel = 	#NOvAanti:	-:	m:	e:	#CC:    #electron	
+>
+
+
+
+/* ***************************************************************************** */
+/* beam contaminations */
+
+
+
+
+
+//
+
+channel(#numu_nue_antinubeam)<
+	@channel = 	#NOvAanti:	+:	m:	e:	#CC:    #electron	
+>
+
+channel(#nue_nue_antinubeam)<
+	@channel = 	#NOvAanti:	+:	e:	e:	#CC:    #electron
+>
+
+/* ***************************************************************************** */
+
+/*
+channel(#nu_mu_QE)<
+	@channel = 	#NOvA:	+:	m:	m:	#QE:    #muonQE
+@post_smearing_efficiencies= {0.3640066108, 0.402816071, 0.6568580267, 0.8438065243, 1.0091721766, 1.2688699244, 1.7578317531, 2.4364001804, 2.5947364146, 2.0006400378, 1.5865029031, 1.4521781554, 1.4543597326, 1.7297009253,2.0808750171, 2.1819381853, 2.0803235912, 2.068944455, 2.180957757}
+>
+
+
+channel(#nu_bar_mu_QE)<
+	@channel = 	#NOvAanti:	-:	m:	m:	#QE:    #muonQE
+@post_smearing_efficiencies= {0.6224530712, 0.4505000527, 0.6221615002, 0.742245483, 0.8743438776, 1.0209610188, 1.220416606, 1.5830656383, 1.7080897998, 1.3932727997, 1.1971821803, 1.0947652759, 1.1085623352, 1.244697357, 1.3816191614, 1.4040509861, 1.2574478444, 1.0928670061, 1.0388763884}
+>
+*/
+
+
+/* ####### Setting the rules ####### */
+
+/* 
+   The signal efficiencies and background rejection cuts are deduced from the talk by Ryan Patterson in Neutrino 2012.
+   These cuts were obtained after a reoptimization done by NOvA group for a large theta13. Signal efficiciency is 45%
+   NC fake rate and mis-id muon rate is 1%.
+*/
+
+
+ 
+
+
+
+
+/* In the following disappearance rules we have introduced certain factors before efficiencies to match fig 240 of the following link:
+ http://www-nova.fnal.gov/plots_and_figures/plots_and_figures.html */
+
+rule(#Nu_Mu_Disappearance)<
+ 	@signal = 1.0@#nu_mu_CC
+	@signalerror = 0.05 : 0.0001 
+	
+	@background =  1.0@#nu_e_signal : 1.0@#numubar_numubar_nubeam 
+	@backgrounderror = 0.05 : 0.0001
+		
+	@sys_on_function = "chiSpectrumTilt"
+	@sys_off_function = "chiNoSysSpectrum"
+	@data_flag=1
+	@data={1,4,5,3,2,7,4,5,7,7,11,26,22,34,40,23,24,46,31,26,20,33}
+>
+
+
+rule(#Nu_Mu_Bar_Disppearance)<
+ 	@signal = 1.0@#nu_bar_mu_CC 
+	@signalerror = 0.05 : 0.0001
+	
+	@background = 1.0@#nu_e_bar_signal : 1.0@#numu_numu_antinubeam 
+	@backgrounderror = 0.05 : 0.0001
+		
+	@sys_on_function = "chiSpectrumTilt"
+	@sys_off_function = "chiNoSysSpectrum"
+	@data_flag=1
+	@data={2,0,5,1,2,0,3,2,0,0,6,5,5,7,5,9,4,6,7,10,8,20}
+>
+
+
+
+/**********************END**********************/
